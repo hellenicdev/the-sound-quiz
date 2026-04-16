@@ -32,3 +32,12 @@ input[type="text"] {
   margin-top: 40px;
   font-size: 18px;
 }
+
+.site-logo {
+  position: fixed;   /* stays visible at all times */
+  top: 10px;
+  left: 10px;
+  width: 60px;       /* adjust size */
+  height: auto;
+  z-index: 9999;     /* stays above everything */
+}
