@@ -1,67 +1,89 @@
 <!DOCTYPE html>
-<head>
-<meta name="description" content="A simple quiz. You hear sounds and you have to guess them."/>
-<meta name="keywords" content="HellenicDev, programming, HTML, CSS, JS, open-source, projects, web-developement, hellenic, dev, developer, simple, quiz, sound, sounds, fun, educational, app, application, The Sound Quiz, guess"/>
-<meta name="author" content="HellenicDev"/>
-<meta name="theme-color" content="#19336e"/>
 <html lang="en">
-<meta property="og:title" content="HellenicDev">
-<meta property="og:description" content="Programming projects, experiments, and tools by HellenicDev.">
-<meta property="og:image" content="https://hellenicdev.github.io/logo.webp">
-<meta property="og:url" content="https://hellenicdev.github.io">
-<meta property="og:type" content="website">
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-9FWQFZME3Z');
-</script>
+<head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A simple quiz. You hear sounds and you have to guess them."/>
+  <meta name="keywords" content="HellenicDev, programming, HTML, CSS, JS, open-source, projects, web-developement, hellenic, dev, developer, simple, quiz, sound, sounds, fun, educational, app, application, The Sound Quiz, guess"/>
+  <meta name="author" content="HellenicDev"/>
+  <meta name="theme-color" content="#19336e"/>
+  <meta property="og:title" content="Sound Quiz">
+  <meta property="og:description" content="Can you guess the sound? Test your ears with this fun quiz!">
+  <meta property="og:image" content="https://hellenicdev.github.io/logo.webp">
+  <meta property="og:url" content="https://hellenicdev.github.io">
+  <meta property="og:type" content="website">
   <title>Sound Quiz</title>
   <link rel="stylesheet" href="style.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9FWQFZME3Z"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-9FWQFZME3Z');
+  </script>
 </head>
 <body>
 
-<a href="/">
-  <img src="https://hellenicdev.github.io/logo.webp" alt="Logo" class="site-logo">
-</a>
+  <div class="container">
+    <header>
+      <a href="/">
+        <img src="https://hellenicdev.github.io/logo.webp" alt="Logo" class="site-logo">
+      </a>
+      <h1 class="title">Sound Quiz</h1>
+      <p class="subtitle">Listen, guess, and test your ears!</p>
+    </header>
 
-  <h1>🔊 Sound Quiz</h1>
-  
-  <div id="quiz">
-    <button id="playButton" onclick="playSound()">Play Sound</button>
+    <main id="quiz" class="card">
+      <div class="progress-bar" id="progressBar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p class="progress-text" id="progressText">Question 1 of 5</p>
 
-    <div class="question" id="question" style="display:none;">
-      <p>What sound was that?</p>
-      <input type="text" id="userGuess" placeholder="Type your guess..." />
-      <button onclick="submitAnswer()">Submit</button>
+      <div class="score-display" id="scoreDisplay">
+        <span>Score: <strong id="scoreValue">0</strong></span>
+      </div>
+
+      <button id="playButton" class="btn btn-primary">Play Sound</button>
+
+      <div class="question" id="question" style="display:none;">
+        <p class="question-prompt">What sound was that?</p>
+        <input type="text" id="userGuess" placeholder="Type your guess here..." autocomplete="off" />
+        <div class="question-actions">
+          <button id="submitBtn" class="btn btn-success">Submit</button>
+          <button id="skipBtn" class="btn btn-skip">Skip</button>
+        </div>
+        <p class="hint">Press <kbd>Enter</kbd> to submit</p>
+      </div>
+
+      <div id="result" class="result"></div>
+    </main>
+
+    <div id="credits" class="card credits" style="display:none;">
+      <h2 class="credits-title">Quiz Completed!</h2>
+      <p class="credits-score" id="finalScore">You scored 0 / 5</p>
+      <h3>Sounds used:</h3>
+      <ul class="credits-list">
+        <li>Sound 1: freesound_community</li>
+        <li>Sound 2: AstonMartinVantageV12</li>
+        <li>Sound 3: freesound_community</li>
+        <li>Sound 4: Rikeromega3 Productions</li>
+        <li>Sound 5: murzik.net</li>
+      </ul>
+      <button id="restartBtn" class="btn btn-primary">Play Again</button>
     </div>
-
-    <div id="result"></div>
-  </div>
-
-  <div id="credits" style="display:none;">
-    <h2>🎉 Quiz Completed!</h2>
-    <h3>CREDITS:</h3>
-    <p>Sound 1: freesound_community</p>
-    <p>Sound 2: AstonMartinVantageV12</p>
-    <p>Sound 3: freesound_community</p>
-    <p>Sound 4: Rikeromega3 Productions</p>
-    <p>Sound 5: murzik.net</p>
   </div>
 
   <!-- Audio elements -->
-  <audio id="1" src="1.mp3"></audio>
-  <audio id="2" src="2.mp3"></audio>
-  <audio id="3" src="3.mp3"></audio>
-  <audio id="4" src="4.mp3"></audio>
-  <audio id="5" src="5.mp3"></audio>
+  <audio id="s1" src="1.mp3" preload="auto"></audio>
+  <audio id="s2" src="2.mp3" preload="auto"></audio>
+  <audio id="s3" src="3.mp3" preload="auto"></audio>
+  <audio id="s4" src="4.mp3" preload="auto"></audio>
+  <audio id="s5" src="5.mp3" preload="auto"></audio>
+
+  <footer>
+    &copy; 2026 HellenicDev &mdash; All projects and content belong to HellenicDev.
+  </footer>
 
   <script src="script.js"></script>
 </body>
-<footer style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; text-align: center; font-size: 14px; color: gray; background: white;
-">
-  © 2026 HellenicDev — All projects and content belong to HellenicDev.
-</footer>
 </html>
