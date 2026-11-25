@@ -1,10 +1,21 @@
 const soundAnswers = {
-  's1': ['ship', 'boat'],
-  's2': ['car'],
-  's3': ['bird'],
-  's4': ['starwars', 'star wars'],
-  's5': ['espressomachiatto', 'espresso machiatto']
+  's1': ['ship', 'boat', 'ship horn', 'boat horn', 'foghorn'],
+  's2': ['car', 'sports car', 'engine', 'car engine', 'aston martin'],
+  's3': ['bird', 'birds', 'bird song', 'birdsong', 'birds singing'],
+  's4': ['star wars', 'lightsaber', 'light saber'],
+  's5': ['espresso machine', 'espresso macchiato', 'espresso machiatto', 'coffee machine', 'espresso', 'coffee']
 };
+
+// Lower-case, drop accents, punctuation, spaces and a leading article so
+// "A Ship!", "the ship" and "ship" all match.
+function normalize(text) {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/^(an?|the)\s+/, '')
+    .replace(/[^a-z0-9]/g, '');
+}
 
 const totalSounds = Object.keys(soundAnswers).length;
 
@@ -41,9 +52,11 @@ function startGame() {
 }
 
 function updateProgress() {
-  const pct = (usedSounds.length / totalSounds) * 100;
-  progressFill.style.width = pct + '%';
-  progressText.textContent = `Question ${usedSounds.length + 1} of ${totalSounds}`;
+  // A sound that is playing but not yet answered does not count as done.
+  const answered = usedSounds.length - (currentSound ? 1 : 0);
+  progressFill.style.width = (answered / totalSounds) * 100 + '%';
+  const current = Math.min(answered + 1, totalSounds);
+  progressText.textContent = `Question ${current} of ${totalSounds}`;
 }
 
 function playSound() {
@@ -62,9 +75,7 @@ function playSound() {
   currentSound = sound;
   updateProgress();
 
-  const audio = document.getElementById(currentSound);
-  audio.currentTime = 0;
-  audio.play().catch(() => {});
+  replaySound();
 
   guessInput.value = '';
   resultEl.textContent = '';
@@ -73,12 +84,24 @@ function playSound() {
   guessInput.focus();
 }
 
+function replaySound() {
+  if (!currentSound) return;
+  const audio = document.getElementById(currentSound);
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+}
+
 function submitAnswer() {
   if (!currentSound) return;
 
-  const guess = guessInput.value.trim().toLowerCase();
+  if (!guessInput.value.trim()) {
+    guessInput.focus();
+    return;
+  }
+
+  const guess = normalize(guessInput.value);
   const validAnswers = soundAnswers[currentSound] || [];
-  const normalizedAnswers = validAnswers.map(a => a.toLowerCase());
+  const normalizedAnswers = validAnswers.map(normalize);
 
   const audio = document.getElementById(currentSound);
   audio.pause();
@@ -98,6 +121,7 @@ function submitAnswer() {
   currentSound = '';
   guessInput.value = '';
   questionEl.style.display = 'none';
+  updateProgress();
 
   setTimeout(() => {
     resultEl.textContent = '';
@@ -126,6 +150,7 @@ function skipSound() {
   currentSound = '';
   guessInput.value = '';
   questionEl.style.display = 'none';
+  updateProgress();
 
   setTimeout(() => {
     resultEl.textContent = '';
@@ -150,6 +175,7 @@ function showCredits() {
 playBtn.addEventListener('click', playSound);
 submitBtn.addEventListener('click', submitAnswer);
 skipBtn.addEventListener('click', skipSound);
+document.getElementById('replayBtn').addEventListener('click', replaySound);
 restartBtn.addEventListener('click', startGame);
 
 guessInput.addEventListener('keydown', (e) => {
