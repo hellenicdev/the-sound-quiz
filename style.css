@@ -300,3 +300,22 @@ footer {
     flex-direction: column;
   }
 }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.btn:focus-visible,
+a:focus-visible {
+  outline: 3px solid #ffd54f;
+  outline-offset: 3px;
+}
+
+.question-actions {
+  flex-wrap: wrap;
+}
